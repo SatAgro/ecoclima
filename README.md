@@ -10,13 +10,16 @@ Parsing tool and library for Ecoclima meteorological stations (https://stacjamet
 ## usage
     cd ecoclima_parser
     
-    #create or clear table
+    # create or clear table
     python init_table db_name user host password table_name
     
-    #update the table with data from file (or url)
+    # update the table with data from file (or url)
     python update_table db_name user host password table_name file
 
 ## usage from python script:
     from ecoclima_parser import api
     api.inittable(db_name, user, host, password, table_name)
     api.updatetable(db_name, user, host, password, table_name, file)
+    
+    # get stats of the day
+    api.getstats(db_name, user, host, password, table_name, datetime)
