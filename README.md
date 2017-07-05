@@ -13,7 +13,7 @@ Parsing tool and library for Ecoclima meteorological stations (https://stacjamet
     #create or clear table
     python init_table db_name user host password table_name
     
-    #update the table with data from file
+    #update the table with data from file (or url)
     python update_table db_name user host password table_name file
 
 ## usage from python script:
