@@ -3,6 +3,7 @@
 
 import psycopg2
 import sys
+import urllib
 
 
 def val_text(value):
@@ -17,7 +18,11 @@ def val_text(value):
 
 
 def update_table(db_name, user, host, password, table_name, file_path):
-    f = open(file_path, "r")
+    try:
+        f = open(file_path, "r")
+    except IOError:
+        f = urllib.urlopen(file_path)
+
     lines = f.readlines()
     for _ in range(3):
         lines.pop(0)
@@ -40,8 +45,8 @@ def update_table(db_name, user, host, password, table_name, file_path):
             query = query + """)"""
             cur.execute(query)
 
-        #cur.execute("SELECT * FROM " + table_name)
-        #print cur.fetchall()
+        # cur.execute("SELECT * FROM " + table_name)
+        # print cur.fetchall()
 
         cur.close()
         conn.commit()

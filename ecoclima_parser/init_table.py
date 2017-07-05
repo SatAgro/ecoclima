@@ -49,7 +49,8 @@ def init_table(db_name, user, host, password, table_name):
                     wind_tx INTEGER,   
                     iss_recept REAL,  
                     arc_int INTEGER, 
-                    CONSTRAINT time_unique UNIQUE (m_date, m_time))""")
+                    CONSTRAINT """ + table_name +
+                    """_time_unique UNIQUE (m_date, m_time))""")
 
         cur.close()
         conn.commit()
