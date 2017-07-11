@@ -19,7 +19,7 @@ def val_text(value):
         return """, '""" + value + """'"""
 
 
-def update_table(db_name, user, host, password, file_path):
+def update(db_name, user, host, password, file_path):
     try:
         f = open(file_path, "r")
     except IOError:
@@ -62,5 +62,5 @@ def update_table(db_name, user, host, password, file_path):
         print(error)
 
 if __name__ == '__main__':
-    update_table(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
+    update(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
                  sys.argv[5])
