@@ -6,10 +6,12 @@ import sys
 import urllib
 
 
+def date_text(value):
+    return """, to_date('""" + value + """', 'YY-MM-DD')"""
+
+
 def val_text(value):
-    if '-' in value:
-        return """to_date('""" + value + """', 'YY-MM-DD')"""
-    elif ':' in value:
+    if ':' in value:
         return """, to_timestamp('""" + value + """', 'HH24:MI')::time"""
     elif '.' in value or value.isdigit():
         return """, """ + value
@@ -17,7 +19,7 @@ def val_text(value):
         return """, '""" + value + """'"""
 
 
-def update_table(db_name, user, host, password, table_name, file_path):
+def update_table(db_name, user, host, password, file_path):
     try:
         f = open(file_path, "r")
     except IOError:
@@ -32,14 +34,19 @@ def update_table(db_name, user, host, password, table_name, file_path):
                                 "' host='" + host + "' password='" + password +
                                 "'")
         cur = conn.cursor()
+        cur.execute("""SELECT id FROM stations WHERE url='""" + file_path + """'""")
+        station_id = cur.fetchone()[0]
+        print station_id
         for line in lines:
+            print line + '\n'
             values = line.split()
-            cur.execute(""" DELETE FROM """ + table_name +
-                        """ WHERE m_date=to_date('""" + values[0] +
+            cur.execute(""" DELETE FROM measures""" +
+                        """ WHERE station_id=""" + str(station_id) + """and m_date=to_date('""" + values[0] +
                         """', 'YY-MM-DD') and m_time=to_timestamp('""" +
                         values[1] + """', 'HH24:MI')::time
                         """)
-            query = """ INSERT INTO """ + table_name + """ VALUES ("""
+            query = """ INSERT INTO measures VALUES (""" + str(station_id) + date_text(values[0])
+            values.pop(0)
             for val in values:
                 query = query + val_text(val)
             query = query + """)"""
@@ -56,4 +63,4 @@ def update_table(db_name, user, host, password, table_name, file_path):
 
 if __name__ == '__main__':
     update_table(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
-                 sys.argv[5], sys.argv[6])
+                 sys.argv[5])

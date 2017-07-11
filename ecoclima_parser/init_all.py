@@ -5,16 +5,22 @@ import psycopg2
 import sys
 
 
-def init_table(db_name, user, host, password, table_name):
+def init_all(db_name, user, host, password):
     try:
         conn = psycopg2.connect("dbname='" + db_name + "' user='" + user +
                                 "' host='" + host + "' password='" + password +
                                 "'")
         cur = conn.cursor()
-        cur.execute("""DROP TABLE IF EXISTS """ + table_name)
-        cur.execute("""CREATE TABLE """ + table_name +
-                    """(m_date DATE, 
-                    m_time TIME, 
+        cur.execute("""DROP TABLE IF EXISTS """ + 'stations')
+        cur.execute("""CREATE TABLE """ + 'stations' +
+                    """(id Serial, name Text,
+                    lat REAL, lon REAL, owner TEXT, url TEXT)""")
+        cur.execute("""DROP TABLE IF EXISTS """ + 'measures')
+        cur.execute("""CREATE TABLE """ + 'measures' +
+                    """(
+                    station_id INTEGER,
+                    m_date DATE, 
+                    m_time TIME,
                     temp_out REAL,   
                     hi_temp REAL,   
                     low_temp REAL,   
@@ -49,7 +55,7 @@ def init_table(db_name, user, host, password, table_name):
                     wind_tx INTEGER,   
                     iss_recept REAL,  
                     arc_int INTEGER, 
-                    CONSTRAINT """ + table_name +
+                    CONSTRAINT """ + 'measures' +
                     """_time_unique UNIQUE (m_date, m_time))""")
 
         cur.close()
@@ -60,4 +66,4 @@ def init_table(db_name, user, host, password, table_name):
 
 
 if __name__ == '__main__':
-    init_table(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+    init_all(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
