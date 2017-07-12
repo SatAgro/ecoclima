@@ -17,7 +17,6 @@ def init_station(db_name, user, host, password, name, lat, lon, owner, url):
                     str(lon) + """, '""" + owner + """', '""" + url + """')""")
 
         cur.execute("""SELECT * FROM stations""")
-        print cur.fetchall()
         cur.close()
         conn.commit()
         conn.close()

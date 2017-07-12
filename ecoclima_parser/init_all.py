@@ -55,8 +55,8 @@ def init_all(db_name, user, host, password):
                     wind_tx INTEGER,   
                     iss_recept REAL,  
                     arc_int INTEGER, 
-                    CONSTRAINT """ + 'measures' +
-                    """_time_unique UNIQUE (m_date, m_time))""")
+                    CONSTRAINT """ +
+                    """station_time_unique UNIQUE (station_id, m_date, m_time))""")
 
         cur.close()
         conn.commit()

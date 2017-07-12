@@ -1,5 +1,5 @@
 import init_all
-import update
+import update as upd
 import init_station
 import psycopg2
 import sys
@@ -16,7 +16,7 @@ def initstation(db_name, user, host, password, name, lat, lon, owner, url):
 
 
 def update(db_name, user, host, password, file_path):
-    update.update(db_name, user, host, password, file_path)
+    upd.update(db_name, user, host, password, file_path)
 
 
 def getstats(db_name, user, host, password, file_path, dt=datetime.today()):

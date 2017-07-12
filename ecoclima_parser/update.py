@@ -36,9 +36,7 @@ def update(db_name, user, host, password, file_path):
         cur = conn.cursor()
         cur.execute("""SELECT id FROM stations WHERE url='""" + file_path + """'""")
         station_id = cur.fetchone()[0]
-        print station_id
         for line in lines:
-            print line + '\n'
             values = line.split()
             cur.execute(""" DELETE FROM measures""" +
                         """ WHERE station_id=""" + str(station_id) + """and m_date=to_date('""" + values[0] +
@@ -63,4 +61,4 @@ def update(db_name, user, host, password, file_path):
 
 if __name__ == '__main__':
     update(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
-                 sys.argv[5])
+           sys.argv[5])
