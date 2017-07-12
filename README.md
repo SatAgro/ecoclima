@@ -6,6 +6,22 @@ Parsing tool and library for Ecoclima meteorological stations (https://stacjamet
     sudo apt-get install postgresql
     pip install psycopg2
     python setup.py install
+    
+## DB creation
+
+    export PGDATABASE=ecoclima
+    export PGUSER=$USER
+    export PGPASSWORD=ecoclima
+    sudo -u postgres psql <<EOF
+    CREATE DATABASE ${PGDATABASE};
+    \c ${PGDATABASE}
+    CREATE EXTENSION postgis;
+    CREATE USER ${PGUSER} with password '${PGPASSWORD}';
+    ALTER ROLE ${PGUSER} SET client_encoding TO 'utf8';
+    ALTER ROLE ${PGUSER} SET default_transaction_isolation TO 'read committed';
+    ALTER ROLE ${PGUSER} SET timezone TO 'UTC';
+    GRANT ALL PRIVILEGES ON DATABASE ${PGDATABASE} TO ${PGUSER};
+    EOF
 
 ## usage
     cd ecoclima_parser
