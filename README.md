@@ -27,3 +27,8 @@ Parsing tool and library for Ecoclima meteorological stations (https://stacjamet
     
     # get stats of the day
     api.getstats(db_name, user, host, password, file_path, datetime)
+    
+## tests
+    cd ecoclima_parser
+    sh prepare_to_tests.sh
+    python test.py
