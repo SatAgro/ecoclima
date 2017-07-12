@@ -21,9 +21,9 @@ Parsing tool and library for Ecoclima meteorological stations (https://stacjamet
 
 ## usage from python script:
     from ecoclima_parser import api
-    api.inittable(db_name, user, host, password, file_path)
+    api.initall(db_name, user, host, password, file_path)
     api.initstation(db_name, user, host, password, station_name, lat, lon, owner, file_path)
-    api.updatetable(db_name, user, host, password, file_path)
+    api.update(db_name, user, host, password, file_path)
     
     # get stats of the day
     api.getstats(db_name, user, host, password, file_path, datetime)
