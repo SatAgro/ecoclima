@@ -47,6 +47,6 @@ def getstats(db_name, user, host, password, file_path, dt=datetime.today()):
         print(error)
 
 if __name__ == '__main__':
-    print getstats(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+    print (getstats(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]))
 
 

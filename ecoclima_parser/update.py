@@ -3,10 +3,10 @@
 
 import psycopg2
 import sys
-try:
-    from urllib import urlopen
-except:
+if sys.version_info[0] == 3:
     from urllib.request import urlopen
+else:
+    from urllib import urlopen
 
 
 def date_text(value):
@@ -25,10 +25,12 @@ def val_text(value):
 def update(db_name, user, host, password, file_path):
     try:
         f = open(file_path, "r")
+        lines = f.readlines()
     except IOError:
         f = urlopen(file_path)
+        lines = f.readlines()
+        lines = list(map(lambda x: x.decode('ascii'), lines))
 
-    lines = f.readlines()
     for _ in range(3):
         lines.pop(0)
 
@@ -61,6 +63,7 @@ def update(db_name, user, host, password, file_path):
         conn.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+    f.close()
 
 if __name__ == '__main__':
     update(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
