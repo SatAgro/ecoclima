@@ -3,7 +3,10 @@
 
 import psycopg2
 import sys
-import urllib
+try:
+    from urllib import urlopen
+except:
+    from urllib.request import urlopen
 
 
 def date_text(value):
@@ -23,7 +26,7 @@ def update(db_name, user, host, password, file_path):
     try:
         f = open(file_path, "r")
     except IOError:
-        f = urllib.urlopen(file_path)
+        f = urlopen(file_path)
 
     lines = f.readlines()
     for _ in range(3):
