@@ -19,6 +19,8 @@ def val_text(value):
         return """, to_timestamp('""" + value + """', 'HH24:MI')::time"""
     elif '.' in value or value.isdigit():
         return """, """ + value
+    elif '---' in value:
+        return """, null"""
     else:
         return """, '""" + value + """'"""
 

@@ -44,8 +44,8 @@ The library store all parsed data into an Postgres data base. To create it just 
     ALTER ROLE ${PGUSER} SET timezone TO 'UTC';
     GRANT ALL PRIVILEGES ON DATABASE ${PGDATABASE} TO ${PGUSER};
     EOF
-
-## Usage
+    
+ ## Usage
     cd ecoclima_parser
     
     # create or clear both tables
@@ -54,17 +54,22 @@ The library store all parsed data into an Postgres data base. To create it just 
     # create or update station of given file path (or url)
     python init_station.py $PGDATABASE $PGUSER localhost $PGPASSWORD station_name lat lon owner url_or_file_path
     
-    # update the table with data from file (or url)
-    python update $PGDATABASE $PGUSER localhost $PGPASSWORD file_path
+    # update the table with data from station given by file path/url or name
+    # when neither url nor name is given, all stations are updated
+    python update.py $PGDATABASE $PGUSER localhost $PGPASSWORD [-p url_or_file_path] [-n station_name]
+    
+    # stats of today
+    python api.py $PGDATABASE $PGUSER localhost $PGPASSWORD [-p url_or_file_path] [-n station_name]
 
-## usage from python script:
+## Usage from python script
     from ecoclima_parser import api
     api.initall(db_name, user, host, password, file_path)
     api.initstation(db_name, user, host, password, station_name, lat, lon, owner, file_path)
     api.update(db_name, user, host, password, file_path)
     
     # get stats of the day
-    api.getstats(db_name, user, host, password, file_path, datetime)
+    # when stations is given by name, file_path sould be ''
+    api.getstats(db_name, user, host, password, file_path [, station_name, datetime])
     
 ## tests
     cd ecoclima_parser
