@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import argparse
 import psycopg2
 import sys
 if sys.version_info[0] == 3:
@@ -22,7 +23,39 @@ def val_text(value):
         return """, '""" + value + """'"""
 
 
-def update(db_name, user, host, password, file_path):
+def update(db_name, user, host, password, file_path='', station_name=''):
+    if file_path == '' and station_name == '':
+        try:
+            conn = psycopg2.connect("dbname='" + db_name + "' user='" + user +
+                                    "' host='" + host + "' password='" + password +
+                                    "'")
+            cur = conn.cursor()
+            cur.execute("""SELECT url FROM stations""")
+            res = cur.fetchall()
+            for el in res:
+                if not update(db_name, user, host, password, el[0]):
+                    return False
+            return True
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+    elif file_path == '':
+        try:
+            conn = psycopg2.connect("dbname='" + db_name + "' user='" + user +
+                                    "' host='" + host + "' password='" + password +
+                                    "'")
+            cur = conn.cursor()
+            cur.execute("""SELECT url FROM stations WHERE name='""" + station_name + """'""")
+
+            try:
+                file_path = cur.fetchone()[0]
+            except (Exception, psycopg2.DatabaseError) as error:
+                print("name doesn't exist")
+                return False
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+
     try:
         f = open(file_path, "r")
         lines = f.readlines()
@@ -64,7 +97,19 @@ def update(db_name, user, host, password, file_path):
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     f.close()
+    return True
 
 if __name__ == '__main__':
-    update(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4],
-           sys.argv[5])
+    p = argparse.ArgumentParser()
+    p.add_argument('dbname')
+    p.add_argument('user')
+    p.add_argument('host')
+    p.add_argument('passw')
+    p.add_argument('-p', '--path', default='')
+    p.add_argument('-n', '--name', default='')
+    ans = p.parse_args()
+    if update(ans.dbname, ans.user, ans.host, ans.passw, ans.path, ans.name):
+        print ('data from station has been updated')
+    else:
+        print ('update failed')
+

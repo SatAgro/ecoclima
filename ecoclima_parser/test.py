@@ -52,9 +52,9 @@ class TestEcoclimaApi(unittest.TestCase):
                         test_data_dir + "data2.txt")
         api.update(db_name, user, host, password, test_data_dir + "data1.txt")
         api.update(db_name, user, host, password, test_data_dir + "data2.txt")
-        stats = api.getstats(db_name, user, host, password, test_data_dir + "data1.txt",
+        stats = api.getstats(db_name, user, host, password, test_data_dir + "data1.txt", "",
                              datetime.datetime(2017, 7, 5))
-        stats2 = api.getstats(db_name, user, host, password, test_data_dir + "data2.txt",
+        stats2 = api.getstats(db_name, user, host, password, test_data_dir + "data2.txt", "",
                               datetime.datetime(2017, 7, 5))
         os.rename(test_data_dir + "data1.txt", test_data_dir + "dataA.txt")
         os.rename(test_data_dir + "data2.txt", test_data_dir + "dataB.txt")
@@ -72,14 +72,14 @@ class TestEcoclimaApi(unittest.TestCase):
         api.initstation(db_name, user, host, password, "name2", 12.5, 14.6,
                         "owner2", test_data_dir + "data2.txt")
         api.update(db_name, user, host, password, test_data_dir + "data1.txt")
-        stats = api.getstats(db_name, user, host, password, test_data_dir + "data1.txt",
+        stats = api.getstats(db_name, user, host, password, test_data_dir + "data1.txt", "",
                              datetime.datetime(2017, 7, 5))
         os.rename(test_data_dir + "data1.txt", test_data_dir + "dataA.txt")
         os.rename(test_data_dir + "dataB.txt", test_data_dir + "data1.txt")
         api.update(db_name, user, host, password, test_data_dir + "data1.txt")
-        stats2 = api.getstats(db_name, user, host, password, test_data_dir + "data1.txt",
+        stats2 = api.getstats(db_name, user, host, password, test_data_dir + "data1.txt", "",
                               datetime.datetime(2017, 7, 5))
-        stats3 = api.getstats(db_name, user, host, password, test_data_dir + "data2.txt",
+        stats3 = api.getstats(db_name, user, host, password, test_data_dir + "data2.txt", "",
                               datetime.datetime(2017, 7, 5))
         os.rename(test_data_dir + "data1.txt", test_data_dir + "dataB.txt")
         self.assertEqual(stats,

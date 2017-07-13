@@ -1,3 +1,4 @@
+import argparse
 import init_all
 import update as upd
 import init_station
@@ -19,8 +20,24 @@ def update(db_name, user, host, password, file_path):
     upd.update(db_name, user, host, password, file_path)
 
 
-def getstats(db_name, user, host, password, file_path, dt=datetime.today()):
+def getstats(db_name, user, host, password, file_path, station_name, dt=datetime.today()):
 
+    if file_path == '':
+        try:
+            conn = psycopg2.connect("dbname='" + db_name + "' user='" + user +
+                                    "' host='" + host + "' password='" + password +
+                                    "'")
+            cur = conn.cursor()
+            cur.execute("""SELECT url FROM stations WHERE name='""" + station_name + """'""")
+
+            try:
+                file_path = cur.fetchone()[0]
+            except (Exception, psycopg2.DatabaseError) as error:
+                print("name doesn't exist")
+                return None
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
     try:
         conn = psycopg2.connect("dbname='" + db_name + "' user='" + user +
                                 "' host='" + host + "' password='" + password +
@@ -47,6 +64,14 @@ def getstats(db_name, user, host, password, file_path, dt=datetime.today()):
         print(error)
 
 if __name__ == '__main__':
-    print (getstats(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]))
+    p = argparse.ArgumentParser()
+    p.add_argument('dbname')
+    p.add_argument('user')
+    p.add_argument('host')
+    p.add_argument('passw')
+    p.add_argument('-p', '--path', default='')
+    p.add_argument('-n', '--name', default='')
+    ans = p.parse_args()
+    print (getstats(ans.dbname, ans.user, ans.host, ans.passw, ans.path, ans.name))
 
 
