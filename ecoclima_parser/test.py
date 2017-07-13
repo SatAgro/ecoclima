@@ -58,11 +58,15 @@ class TestEcoclimaApi(unittest.TestCase):
                               datetime.datetime(2017, 7, 5))
         os.rename(test_data_dir + "data1.txt", test_data_dir + "dataA.txt")
         os.rename(test_data_dir + "data2.txt", test_data_dir + "dataB.txt")
-        self.assertEqual(stats,
-                         {'precipitation': 0.0, 'temperature':
-                             {'aver': 10.672727281397, 'max': 12.0, 'min': 10.1}})
-        self.assertEqual(stats2,
-                         {'precipitation': 0.0, 'temperature': {'aver': 10.1439999008179, 'max': 11.7, 'min': 9.6}})
+        self.assertEqual(stats['precipitation'], 0.0)
+        self.assertTrue(abs(stats['temperature']['aver'] - 10.672727281397) < 0.001)
+        self.assertEqual(stats['temperature']['max'], 12.0)
+        self.assertEqual(stats['temperature']['min'], 10.1)
+
+        self.assertEqual(stats2['precipitation'], 0.0)
+        self.assertTrue(abs(stats2['temperature']['aver'] - 10.1439999008179) < 0.01)
+        self.assertEqual(stats2['temperature']['max'], 11.7)
+        self.assertEqual(stats2['temperature']['min'], 9.6)
 
     def test_update2(self):
         api.initall(db_name, user, host, password)
@@ -82,11 +86,16 @@ class TestEcoclimaApi(unittest.TestCase):
         stats3 = api.getstats(db_name, user, host, password, test_data_dir + "data2.txt", "",
                               datetime.datetime(2017, 7, 5))
         os.rename(test_data_dir + "data1.txt", test_data_dir + "dataB.txt")
-        self.assertEqual(stats,
-                         {'precipitation': 0.0, 'temperature':
-                             {'aver': 10.672727281397, 'max': 12.0, 'min': 10.1}})
-        self.assertEqual(stats2,   {'precipitation': 0.0, 'temperature':
-            {'aver': 10.4249999523163, 'max': 12.0, 'min': 9.6}})
+        self.assertEqual(stats['precipitation'], 0.0)
+        self.assertTrue(abs(stats['temperature']['aver'] - 10.672727281397) < 0.001)
+        self.assertEqual(stats['temperature']['max'], 12.0)
+        self.assertEqual(stats['temperature']['min'], 10.1)
+
+        self.assertEqual(stats2['precipitation'], 0.0)
+        self.assertTrue(abs(stats2['temperature']['aver'] - 10.4249999523163) < 0.001)
+        self.assertEqual(stats2['temperature']['max'], 12.0)
+        self.assertEqual(stats2['temperature']['min'], 9.6)
+
         self.assertEqual(stats3, {'precipitation': None, 'temperature':
             {'aver': None, 'max': None, 'min': None}})
 

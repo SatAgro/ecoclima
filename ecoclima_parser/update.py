@@ -33,12 +33,13 @@ def update(db_name, user, host, password, file_path='', station_name=''):
             cur.execute("""SELECT url FROM stations""")
             res = cur.fetchall()
             for el in res:
-                if not update(db_name, user, host, password, el[0]):
-                    return False
-            return True
+                update(db_name, user, host, password, el[0])
 
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
+            raise
+        return
+
     elif file_path == '':
         try:
             conn = psycopg2.connect("dbname='" + db_name + "' user='" + user +
@@ -50,11 +51,11 @@ def update(db_name, user, host, password, file_path='', station_name=''):
             try:
                 file_path = cur.fetchone()[0]
             except (Exception, psycopg2.DatabaseError) as error:
-                print("name doesn't exist")
-                return False
+                raise Exception("name doesn't exist")
 
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
+            raise
 
     try:
         f = open(file_path, "r")
@@ -96,8 +97,9 @@ def update(db_name, user, host, password, file_path='', station_name=''):
         conn.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+        f.close()
+        raise
     f.close()
-    return True
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
@@ -108,8 +110,6 @@ if __name__ == '__main__':
     p.add_argument('-p', '--path', default='')
     p.add_argument('-n', '--name', default='')
     ans = p.parse_args()
-    if update(ans.dbname, ans.user, ans.host, ans.passw, ans.path, ans.name):
-        print ('data from station has been updated')
-    else:
-        print ('update failed')
+    update(ans.dbname, ans.user, ans.host, ans.passw, ans.path, ans.name)
+    print ('data from station has been updated')
 

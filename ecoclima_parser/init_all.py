@@ -63,12 +63,9 @@ def init_all(db_name, user, host, password):
         conn.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-        return False
-    return True
+        raise
 
 
 if __name__ == '__main__':
-    if init_all(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]):
-        print ("tables for stations and measures have been created")
-    else:
-        print ("init failed")
+    init_all(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    print ("tables for stations and measures have been created")

@@ -20,7 +20,7 @@ def update(db_name, user, host, password, file_path):
     upd.update(db_name, user, host, password, file_path)
 
 
-def getstats(db_name, user, host, password, file_path, station_name, dt=datetime.today()):
+def getstats(db_name, user, host, password, file_path, station_name='', dt=datetime.today()):
 
     if file_path == '':
         try:
@@ -33,11 +33,10 @@ def getstats(db_name, user, host, password, file_path, station_name, dt=datetime
             try:
                 file_path = cur.fetchone()[0]
             except (Exception, psycopg2.DatabaseError) as error:
-                print("name doesn't exist")
-                return None
+                raise Exception("name doesn't exist")
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
+            raise
     try:
         conn = psycopg2.connect("dbname='" + db_name + "' user='" + user +
                                 "' host='" + host + "' password='" + password +

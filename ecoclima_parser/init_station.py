@@ -21,14 +21,11 @@ def init_station(db_name, user, host, password, name, lat, lon, owner, url):
         conn.commit()
         conn.close()
     except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-        return False
-    return True
+        print (error)
+        raise
 
 
 if __name__ == '__main__':
-    if init_station(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5],
-                 sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9]):
-        print ('station has been added')
-    else:
-        print ('station adding failed')
+    init_station(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5],
+                 sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9])
+    print ('station has been added')
